@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Difference - Donate Today</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="donation-card">
+            <h1>Make a Difference Today</h1>
+            <p class="impact-text">Your generosity changes lives</p>
+            
+            <div class="amount-buttons">
+                <button class="amount-btn" data-amount="5">$5</button>
+                <button class="amount-btn" data-amount="10">$10</button>
+                <button class="amount-btn" data-amount="25">$25</button>
+                <button class="amount-btn" data-amount="50">$50</button>
+                <button class="amount-btn custom">Custom</button>
+            </div>
+
+            <div class="custom-amount-input" style="display: none;">
+                <input type="number" id="customAmount" placeholder="Enter amount">
+            </div>
+
+            <button class="donate-btn" id="donateButton">Donate Now</button>
+            
+            <div class="donation-footer">
+                <p>🔒 Secure Payment</p>
+                <div class="payment-methods">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="Visa">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349228.png" alt="MasterCard">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349230.png" alt="PayPal">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<meta property="og:title" content="Support My Content!">
+<meta property="og:description" content="Your generosity helps keep the content coming!">
+<meta property="og:image" content="path-to-your-thumbnail.jpg">
