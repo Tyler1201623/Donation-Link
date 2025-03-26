@@ -1,0 +1,9 @@
+{
+  "name": "donation-link",
+  "version": "1.0.0",
+  "description": "Modern donation page with multiple payment options",
+  "main": "index.html",
+  "author": "Tyler Keesee",
+  "license": "MIT",
+  "dependencies": {}
+} 

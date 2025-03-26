@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Support My Work - Donation Page</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- PayPal SDK - Fully functional on GitHub Pages -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    <!-- QR Code library for crypto addresses -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  </head>
+  <body>
+    <div class="theme-toggle">
+      <button id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+
+    <div class="container">
+      <div class="donation-card">
+        <h1>Support My Work</h1>
+        <p class="impact-text">
+          Your generosity helps me continue creating and improving. Thank you
+          for your support!
+        </p>
+
+        <div class="amount-buttons">
+          <button class="amount-btn" data-amount="5">$5</button>
+          <button class="amount-btn" data-amount="10">$10</button>
+          <button class="amount-btn" data-amount="25">$25</button>
+          <button class="amount-btn" data-amount="50">$50</button>
+          <button class="amount-btn" data-amount="100">$100</button>
+          <button class="amount-btn" data-amount="custom">Custom</button>
+        </div>
+
+        <div class="recurring-donation">
+          <span>Make this a monthly donation</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="recurringToggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="payment-tabs">
+          <button class="tab-button active" data-tab="standard">
+            Standard
+          </button>
+          <button class="tab-button" data-tab="crypto">Cryptocurrency</button>
+          <button class="tab-button" data-tab="web3">Web3</button>
+        </div>
+
+        <div id="standardTab" class="tab-content">
+          <div class="payment-method-selector">
+            <h3>Select Payment Method</h3>
+            <div class="payment-options">
+              <button class="payment-option active" data-payment="paypal">
+                <i class="fab fa-paypal"></i> PayPal
+              </button>
+              <button class="payment-option" data-payment="card">
+                <i class="far fa-credit-card"></i> Card
+              </button>
+              <button class="payment-option" data-payment="venmo">
+                <i class="fab fa-venmo"></i> Venmo
+              </button>
+              <button class="payment-option" data-payment="applepay">
+                <i class="fab fa-apple"></i> Apple Pay
+              </button>
+              <button class="payment-option" data-payment="googlepay">
+                <i class="fab fa-google"></i> Google Pay
+              </button>
+            </div>
+          </div>
+
+          <div id="paypal-form" class="payment-form active">
+            <div id="paypal-button-container"></div>
+          </div>
+
+          <div id="card-form" class="payment-form">
+            <div class="github-notice">
+              <p>
+                <i class="fas fa-info-circle"></i> Credit card processing
+                requires a server backend. This is a demonstration only when
+                deployed on GitHub Pages.
+              </p>
+            </div>
+            <div id="card-form-container">
+              <form id="card-form-elements">
+                <div class="form-group">
+                  <label for="cardName">Card Holder Name</label>
+                  <input
+                    type="text"
+                    id="cardName"
+                    class="form-control"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="cardNumber">Card Number</label>
+                  <input
+                    type="text"
+                    id="cardNumber"
+                    class="form-control"
+                    placeholder="1234 5678 9012 3456"
+                  />
+                </div>
+                <div class="form-row">
+                  <div class="form-group half">
+                    <label for="cardExpiry">Expiration (MM/YY)</label>
+                    <input
+                      type="text"
+                      id="cardExpiry"
+                      class="form-control"
+                      placeholder="MM/YY"
+                    />
+                  </div>
+                  <div class="form-group half">
+                    <label for="cardCvv">CVV</label>
+                    <input
+                      type="text"
+                      id="cardCvv"
+                      class="form-control"
+                      placeholder="123"
+                    />
+                  </div>
+                </div>
+                <button type="button" class="donate-btn" id="cardDonateBtn">
+                  Donate
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div id="venmo-form" class="payment-form">
+            <div class="github-notice">
+              <p>
+                <i class="fas fa-info-circle"></i> Venmo processing requires a
+                server backend. This is a demonstration only when deployed on
+                GitHub Pages.
+              </p>
+            </div>
+            <div id="venmo-button-container" class="demo-container">
+              <p>
+                On a live server, the Venmo payment button would appear here.
+              </p>
+              <button class="donate-btn" id="venmoDemoBtn">
+                Donate with Venmo (Demo)
+              </button>
+            </div>
+          </div>
+
+          <div id="applepay-form" class="payment-form">
+            <div class="github-notice">
+              <p>
+                <i class="fas fa-info-circle"></i> Apple Pay requires merchant
+                validation through a server. This is a demonstration only when
+                deployed on GitHub Pages.
+              </p>
+            </div>
+            <div id="apple-pay-container" class="demo-container">
+              <button class="donate-btn apple-pay-button" id="applePayDemoBtn">
+                <i class="fab fa-apple"></i> Donate with Apple Pay (Demo)
+              </button>
+            </div>
+          </div>
+
+          <div id="googlepay-form" class="payment-form">
+            <div class="github-notice">
+              <p>
+                <i class="fas fa-info-circle"></i> Google Pay requires server
+                integration. This is a demonstration only when deployed on
+                GitHub Pages.
+              </p>
+            </div>
+            <div id="google-pay-container" class="demo-container">
+              <button
+                class="donate-btn google-pay-button"
+                id="googlePayDemoBtn"
+              >
+                <i class="fab fa-google"></i> Donate with Google Pay (Demo)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cryptoTab" class="tab-content" style="display: none">
+          <div class="payment-method-selector">
+            <h3>Select Cryptocurrency</h3>
+            <div class="payment-options">
+              <button class="payment-option active" data-crypto="btc">
+                <i class="fab fa-bitcoin"></i> Bitcoin
+              </button>
+              <button class="payment-option" data-crypto="eth">
+                <i class="fab fa-ethereum"></i> Ethereum
+              </button>
+              <button class="payment-option" data-crypto="usdc">
+                <i class="fas fa-dollar-sign"></i> USDC
+              </button>
+              <button class="payment-option" data-crypto="sol">
+                <i class="fas fa-sun"></i> Solana
+              </button>
+            </div>
+          </div>
+
+          <div class="github-notice">
+            <p>
+              <i class="fas fa-info-circle"></i> On GitHub Pages, cryptocurrency
+              addresses are for demonstration only. In production, replace with
+              your actual wallet addresses.
+            </p>
+          </div>
+
+          <div class="crypto-qr">
+            <div id="qrcode"></div>
+            <div class="crypto-address">
+              <input type="text" id="cryptoAddressDisplay" readonly />
+              <button id="copyAddress"><i class="fas fa-copy"></i></button>
+            </div>
+          </div>
+
+          <div class="crypto-instructions">
+            <p>
+              Scan the QR code or copy the address to send your donation. After
+              sending, transactions are typically confirmed within minutes.
+            </p>
+          </div>
+
+          <button class="donate-btn" id="cryptoConfirmBtn">
+            I've Sent My Donation
+          </button>
+        </div>
+
+        <div id="web3Tab" class="tab-content" style="display: none">
+          <div class="payment-method-selector">
+            <h3>Select Web3 Wallet</h3>
+            <div class="payment-options">
+              <button class="payment-option active" data-wallet="metamask">
+                <i class="fas fa-fox"></i> MetaMask
+              </button>
+              <button class="payment-option" data-wallet="walletconnect">
+                <i class="fas fa-wallet"></i> WalletConnect
+              </button>
+              <button class="payment-option" data-wallet="phantom">
+                <i class="fas fa-ghost"></i> Phantom
+              </button>
+            </div>
+          </div>
+
+          <div class="github-notice">
+            <p>
+              <i class="fas fa-info-circle"></i> Web3 wallet connections are
+              simulated on GitHub Pages. A server is required for actual
+              blockchain transactions.
+            </p>
+          </div>
+
+          <div class="connect-wallet-message">
+            <p>
+              Connect your wallet to make a donation using ETH, SOL, or other
+              tokens.
+            </p>
+            <button class="donate-btn" id="connectWalletBtn">
+              Connect Wallet (Demo)
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="selectedAmount"
+          class="selected-amount"
+          style="display: none"
+        ></div>
+
+        <div class="donation-footer">
+          <p>
+            Secure payment processing. Your financial information is never
+            stored.
+          </p>
+          <div class="payment-methods">
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/paypal/paypal-original.svg"
+              alt="PayPal"
+            />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg"
+              alt="Apple Pay"
+            />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+              alt="Google Pay"
+            />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bitcoin/bitcoin-original.svg"
+              alt="Bitcoin"
+            />
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ethereum/ethereum-original.svg"
+              alt="Ethereum"
+            />
+          </div>
+        </div>
+
+        <div class="privacy-policy">
+          <a href="#" id="privacyLink">Privacy Policy</a> |
+          <a href="#" id="termsLink">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Amount Modal -->
+    <div id="customAmountModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Enter Custom Amount</h2>
+        <input
+          type="number"
+          id="customAmount"
+          min="1"
+          step="1"
+          placeholder="Enter amount"
+        />
+        <button id="saveAmount">Save Amount</button>
+      </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="modal">
+      <div class="modal-content privacy-content">
+        <span class="close">&times;</span>
+        <h2>Privacy Policy</h2>
+        <div class="privacy-text">
+          <p>Last updated: January 2025</p>
+
+          <h3>Information Collection</h3>
+          <p>
+            When you make a donation, we collect only the information necessary
+            to process your payment. For PayPal donations, all payment data is
+            handled directly by PayPal. We do not store your financial
+            information on our servers.
+          </p>
+
+          <h3>Data Usage</h3>
+          <p>
+            The information collected is used solely for processing your
+            donation and providing you with donation receipts if requested. We
+            may use your email to send you a thank you message, but will not
+            subscribe you to marketing communications without your explicit
+            consent.
+          </p>
+
+          <h3>Cookies & Local Storage</h3>
+          <p>
+            We use local storage to remember your theme preference. No tracking
+            cookies are used on this donation page.
+          </p>
+
+          <h3>Third-Party Services</h3>
+          <p>
+            Payment processing is handled by trusted third-party services such
+            as PayPal. These services have their own privacy policies that
+            govern how they use your information.
+          </p>
+
+          <h3>Data Security</h3>
+          <p>
+            We implement appropriate security measures to protect your personal
+            information. However, please be aware that no method of transmission
+            over the internet is 100% secure.
+          </p>
+
+          <h3>Your Rights</h3>
+          <p>
+            You have the right to access, correct, or delete your personal
+            information. If you have any privacy concerns or requests, please
+            contact us at keeseetyler17@yahoo.com.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div id="termsModal" class="modal">
+      <div class="modal-content privacy-content">
+        <span class="close">&times;</span>
+        <h2>Terms of Service</h2>
+        <div class="privacy-text">
+          <p>Last updated: January 2025</p>
+
+          <h3>Donation Terms</h3>
+          <p>
+            All donations are voluntary and non-refundable. By making a
+            donation, you acknowledge that you are not receiving any goods or
+            services in exchange for your contribution.
+          </p>
+
+          <h3>Payment Processing</h3>
+          <p>
+            Donations are processed through secure third-party payment
+            processors. By using this donation page, you agree to comply with
+            the terms and conditions of these payment processors.
+          </p>
+
+          <h3>User Conduct</h3>
+          <p>
+            Users of this donation page agree not to engage in any fraudulent
+            activity or attempt to manipulate the donation system.
+          </p>
+
+          <h3>Intellectual Property</h3>
+          <p>
+            All content on this donation page, including text, graphics, logos,
+            and software, is the property of the page owner and is protected by
+            copyright laws.
+          </p>
+
+          <h3>Limitation of Liability</h3>
+          <p>
+            The donation page is provided "as is" without warranties of any
+            kind. We are not liable for any damages arising from your use of
+            this page.
+          </p>
+
+          <h3>Changes to Terms</h3>
+          <p>
+            We reserve the right to modify these terms at any time. Continued
+            use of the donation page after changes constitutes acceptance of the
+            updated terms.
+          </p>
+
+          <h3>Contact</h3>
+          <p>
+            If you have any questions about these terms, please contact us at
+            keeseetyler17@yahoo.com.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>

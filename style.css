@@ -1,0 +1,837 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --accent-color: #48bb78;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --background-light: #f7fafc;
+  --background-main: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+  --card-bg: white;
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+  --transition-speed: 0.3s;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --hover-brightness: 1.05;
+}
+
+[data-theme="dark"] {
+  --primary-color: #7f9cf5;
+  --secondary-color: #9f7aea;
+  --accent-color: #68d391;
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --background-light: #2d3748;
+  --background-main: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  --card-bg: #1a202c;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --hover-brightness: 1.2;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --primary-color: #7f9cf5;
+    --secondary-color: #9f7aea;
+    --accent-color: #68d391;
+    --text-primary: #f7fafc;
+    --text-secondary: #cbd5e0;
+    --background-light: #2d3748;
+    --background-main: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    --card-bg: #1a202c;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --hover-brightness: 1.2;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: var(--background-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 5vw, 40px);
+  color: var(--text-primary);
+  transition: all var(--transition-speed) ease;
+}
+
+.container {
+  width: min(100%, 600px);
+  margin: 0 auto;
+  position: relative;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.theme-toggle button {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed) ease;
+}
+
+.theme-toggle button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(15deg);
+}
+
+.donation-card {
+  background: var(--card-bg);
+  padding: clamp(24px, 5vw, 40px);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  animation: cardFloat 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-speed) ease;
+}
+
+h1 {
+  margin-bottom: clamp(16px, 4vw, 24px);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+h2 {
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+h3 {
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.impact-text {
+  color: var(--text-secondary);
+  margin-bottom: clamp(24px, 5vw, 32px);
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  line-height: 1.5;
+}
+
+.amount-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: clamp(8px, 2vw, 12px);
+  margin-bottom: clamp(20px, 4vw, 28px);
+}
+
+.amount-btn {
+  padding: clamp(12px, 3vw, 16px);
+  border: 2px solid var(--primary-color);
+  border-radius: calc(var(--border-radius) - 4px);
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  color: var(--text-primary);
+}
+
+.amount-btn:hover,
+.amount-btn.active {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  filter: brightness(var(--hover-brightness));
+}
+
+.amount-btn:active {
+  transform: scale(0.95);
+}
+
+/* Recurring Donation Toggle */
+.recurring-donation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  color: var(--text-secondary);
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: var(--transition-speed);
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: var(--transition-speed);
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--accent-color);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Payment Tabs */
+.payment-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--background-light);
+}
+
+.tab-button {
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+}
+
+.tab-button:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -1px;
+  left: 0;
+  background: linear-gradient(
+    45deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  transition: width var(--transition-speed) ease;
+}
+
+.tab-button.active {
+  color: var(--text-primary);
+}
+
+.tab-button.active:after {
+  width: 100%;
+}
+
+.tab-button:hover {
+  color: var(--primary-color);
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.payment-method-selector {
+  margin: 20px 0;
+}
+
+.payment-method-selector h3 {
+  margin-bottom: 15px;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+}
+
+.payment-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.payment-option {
+  padding: 12px;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.payment-option i {
+  font-size: 1.2rem;
+}
+
+.payment-option:hover,
+.payment-option.active {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.payment-option:active {
+  transform: scale(0.95);
+}
+
+.donate-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(
+    45deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 20px 0;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.donate-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transition: all var(--transition-speed) ease;
+}
+
+.donate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  filter: brightness(var(--hover-brightness));
+}
+
+.donate-btn:hover::after {
+  transform: translateY(-100%);
+}
+
+.donate-btn:active {
+  transform: scale(0.98);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease-out;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  margin: 10% auto;
+  padding: clamp(20px, 5vw, 30px);
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: var(--box-shadow);
+  color: var(--text-primary);
+}
+
+.privacy-content {
+  max-width: 800px;
+  text-align: left;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.privacy-text {
+  line-height: 1.6;
+}
+
+.privacy-text h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.privacy-text p {
+  margin-bottom: 15px;
+}
+
+.close {
+  color: var(--text-secondary);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color var(--transition-speed) ease;
+  line-height: 0.8;
+}
+
+.close:hover {
+  color: var(--text-primary);
+}
+
+#customAmount {
+  width: 100%;
+  padding: 15px;
+  margin: 20px 0;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  font-size: 1.1em;
+  transition: border-color var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+
+#customAmount:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(118, 75, 162, 0.2);
+}
+
+#saveAmount {
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 500;
+  transition: all var(--transition-speed) ease;
+}
+
+#saveAmount:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+}
+
+#saveAmount:active {
+  transform: scale(0.95);
+}
+
+.selected-amount {
+  margin: 20px 0;
+  padding: 15px;
+  background: var(--background-light);
+  border-radius: var(--border-radius);
+  font-size: 1.2em;
+  color: var(--text-primary);
+  animation: fadeIn var(--transition-speed) ease-out;
+  border-left: 4px solid var(--primary-color);
+}
+
+.donation-footer {
+  margin-top: 30px;
+  color: var(--text-secondary);
+}
+
+.payment-methods {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.payment-methods img {
+  height: 30px;
+  opacity: 0.7;
+  transition: opacity var(--transition-speed) ease;
+  filter: grayscale(20%);
+}
+
+[data-theme="dark"] .payment-methods img {
+  filter: grayscale(20%) brightness(1.5);
+}
+
+.payment-methods img:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+[data-theme="dark"] .payment-methods img:hover {
+  filter: grayscale(0%) brightness(1.5);
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+  z-index: 999;
+}
+
+.success-message {
+  background: var(--accent-color);
+  color: white;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-top: 20px;
+  animation: fadeIn var(--transition-speed) ease-out;
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+}
+
+.success-message h3 {
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  color: white;
+}
+
+.error-message {
+  background: #f56565;
+  color: white;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-top: 20px;
+  animation: fadeIn var(--transition-speed) ease-out;
+  box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+}
+
+#paypal-button-container {
+  margin: 20px 0;
+}
+
+/* Credit Card Form Styles */
+#card-form-container {
+  margin: 20px 0;
+}
+
+#card-form {
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  background: var(--card-bg);
+  font-size: 1rem;
+  transition: border-color var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+  min-height: 42px;
+  color: var(--text-primary);
+}
+
+.form-control:focus-within {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(118, 75, 162, 0.2);
+}
+
+/* Crypto Payment Styles */
+.crypto-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  gap: 15px;
+}
+
+#qrcode {
+  padding: 15px;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.crypto-address {
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+}
+
+.crypto-address input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  font-size: 0.9rem;
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+.crypto-address button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0 15px;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.crypto-address button:hover {
+  background: var(--secondary-color);
+}
+
+.crypto-instructions {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* Web3 Wallet Connection */
+.connect-wallet-message {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 20px auto;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Privacy Policy */
+.privacy-policy {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.privacy-policy a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+}
+
+.privacy-policy a:hover {
+  text-decoration: underline;
+  color: var(--secondary-color);
+}
+
+@keyframes cardFloat {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .amount-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .donate-btn {
+    padding: 16px;
+  }
+
+  .payment-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .amount-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 30% auto;
+  }
+
+  .donate-btn {
+    padding: 14px;
+    font-size: 1.1em;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .payment-tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GitHub Pages specific styles */
+.github-notice {
+  background-color: rgba(102, 126, 234, 0.1);
+  border-left: 4px solid var(--primary-color);
+  padding: 10px 15px;
+  margin: 15px 0;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.github-notice i {
+  color: var(--primary-color);
+  margin-right: 5px;
+}
+
+.demo-container {
+  border: 2px dashed var(--text-secondary);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.demo-container p {
+  margin-bottom: 15px;
+  color: var(--text-secondary);
+}
+
+/* Payment form visibility */
+.payment-form {
+  display: none;
+}
+
+.payment-form.active {
+  display: block;
+}
